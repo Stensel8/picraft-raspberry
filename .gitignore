@@ -1,0 +1,48 @@
+# Binaries
+*.jar
+libraries
+
+# Temporary files
+.cache
+cache
+map-color-cache.dat
+usercache.json
+version_history.json
+
+# Logs & History
+crash-reports/
+history/
+logs
+*.log
+.bash_history
+
+# Sensitive files
+.console_history
+banned-ips.json
+banned-players.json
+ops.json
+whitelist.json
+
+# World files
+world
+world[-_]*
+world.bak
+*_nether
+*_nether_old
+*_the_end
+*_the_end_old
+
+# Backups
+backup.sh
+backup
+**/*.bak
+
+# Plugins data
+plugins
+plugins-disabled
+wepif.yml
+webmap/
+
+# Others
+.hawtjni
+DeathMessages.yml

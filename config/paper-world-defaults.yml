@@ -1,0 +1,64 @@
+# paper-world-defaults.yml
+
+# Global spawn limits (from Bukkit)
+spawn-limits:
+  monsters: 70
+  animals: 10
+  water-animals: 5
+  water-ambient: 15
+  water-underground-creature: 5
+  axolotls: 3
+  ambient: 15
+
+# Chunk garbage collection settings (from Bukkit)
+chunk-gc:
+  period-in-ticks: 300
+  load-threshold: 300
+
+# Ticks per spawn (from Bukkit)
+ticks-per:
+  axolotl-spawns: 10
+  water-underground-creature-spawns: 300
+  animal-spawns: 5
+  monster-spawns: 1
+  water-spawns: 5
+  water-ambient-spawns: 5
+  ambient-spawns: 10
+  autosave: 24000
+
+# World-specific settings (combining key Spigot values with performance in mind)
+world-settings:
+  default:
+    # Limits for simulation and chunk loading
+    simulation-distance: 15
+    view-distance: 30
+    mob-spawn-range: 6
+
+    # Entity activation ranges (adjusted for normal play)
+    entity-activation-range:
+      animals: 32
+      monsters: 48
+      raiders: 48
+      misc: 16
+      water: 32
+      villagers: 32
+      flying-monsters: 64
+
+    # Entity tracking ranges (lowered for performance; feel free to adjust)
+    entity-tracking-range:
+      display: 64
+      players: 48
+      animals: 48
+      monsters: 48
+      misc: 32
+      other: 64
+
+  nether:
+    simulation-distance: 15
+    view-distance: 30
+    mob-spawn-range: 6
+
+  the_end:
+    simulation-distance: 15
+    view-distance: 30
+    mob-spawn-range: 6
