@@ -131,7 +131,7 @@ check_java
 SERVER_ROOT_DIR=$(pwd)
 
 # Detect server jar: only files with valid jar filenames (avoid files with extra suffixes)
-SERVER_JAR_NAME=$(ls "${SERVER_ROOT_DIR}" | grep -E "^(purpur|paper)-[0-9.]+-[0-9]+\.jar$" | sort -V | tail -n 1)
+SERVER_JAR_NAME=$(ls "${SERVER_ROOT_DIR}" | grep -E "^(paper)-[0-9.]+-[0-9]+\.jar$" | sort -V | tail -n 1)
 
 SERVER_JAR_PATH="${SERVER_ROOT_DIR}/${JAR_FILE_NAME}"
 

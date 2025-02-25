@@ -1,6 +1,6 @@
 # Raspberry Pi Minecraft Server
 
-This repository contains a lightweight Minecraft server optimized for running on a Raspberry Pi 5. It uses **PurpurMC**—a high-performance Minecraft server implementation based on PaperMC—to deliver a smooth and efficient experience on resource-constrained devices.
+This repository contains a lightweight Minecraft server optimized for running on a Raspberry Pi 5. It uses a combination of the latest **PaperMC forks/flavored servers** to deliver a smooth and efficient experience on resource-constrained devices.
 
 > **Note:** This project is still under development. Contributions and feedback are welcome!
 
