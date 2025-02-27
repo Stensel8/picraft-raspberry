@@ -21,6 +21,7 @@ logs
 banned-ips.json
 banned-players.json
 ops.json
+permissions.yml
 whitelist.json
 
 # World files
