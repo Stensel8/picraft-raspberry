@@ -8,7 +8,7 @@ settings:
   connection-throttle: 1000
   query-plugins: false
   deprecated-verbose: default
-  shutdown-message: "Server has been shut down by Sten or has crashed, sorry!"
+  shutdown-message: Server has been shut down by Sten or has crashed, sorry!
   minimum-api: none
 
 spawn-limits:

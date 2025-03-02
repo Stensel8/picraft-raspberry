@@ -1,5 +1,4 @@
 # Binaries
-*.jar
 libraries
 
 # Temporary files
@@ -39,7 +38,6 @@ backup
 **/*.bak
 
 # Plugins data
-plugins
 plugins-disabled
 wepif.yml
 webmap/

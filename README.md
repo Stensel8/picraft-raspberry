@@ -124,6 +124,29 @@ To stop the server, simply press `Ctrl+C` in the terminal where the server is ru
 
 - Currently, this server supports **Minecraft 1.21.4**.
 
+## Third-Party Plugins
+
+This project uses a few third-party plugins. These plugins are owned by their respective creators, and we do not claim any rights or ownership over them. Below is a short overview of each plugin and its functionality:
+
+1. **LuckPerms**  
+   - **Description:** A powerful permissions management system for Minecraft servers.  
+   - **Website:** [https://luckperms.net/](https://luckperms.net/)  
+
+2. **Chunky**  
+   - **Description:** A pre-generation plugin that helps generate chunks in advance to reduce lag.  
+   - **Sources:**  
+     - [Hangar](https://hangar.papermc.io/pop4959/Chunky)  
+     - [GitHub](https://github.com/pop4959/Chunky)  
+
+3. **EssentialsX**  
+   - **Description:** Provides many essential server commands and features, including kits, warps, and economy support.  
+   - **Sources:**  
+     - [Official Website](https://essentialsx.net/)  
+     - [GitHub](https://github.com/EssentialsX/Essentials/)  
+
+Please note that each plugin remains the property of its original authors. We are simply using these tools and do not hold any rights to them.
+
+
 ## Disclaimer
 
 This project is experimental and still under active development. Expect bugs and incomplete features. Contributions, bug reports, and feedback are highly appreciated.

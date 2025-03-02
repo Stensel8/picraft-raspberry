@@ -1,3 +1,15 @@
+# This is the main configuration file for Spigot.
+# As you can see, there's tons to configure. Some options may impact gameplay, so use
+# with caution, and make sure you know what each option does before configuring.
+# For a reference for any variable inside this file, check out the Spigot wiki at
+# http://www.spigotmc.org/wiki/spigot-configuration/
+#
+# If you need help with the configuration or have any questions related to Spigot,
+# join us at the Discord or drop by our forums and leave a post.
+#
+# Discord: https://www.spigotmc.org/go/discord
+# Forums: http://www.spigotmc.org/
+
 settings:
   log-named-deaths: true
   debug: false
@@ -23,12 +35,14 @@ settings:
     attackDamage:
       max: 1.0
 messages:
-  whitelist: "You are not whitelisted on this server. If you believe this is an error, please contact Sten."
-  server-full: "The server is full, please try again later!"
-  outdated-client: "Your Minecraft version is outdated! Please use version {0}."
-  outdated-server: "The server is running an older version ({0}), please try again later!"
-  restart: "The server is restarting, please wait!"
-  unknown-command: "Unknown command. Try something else!"
+  whitelist: You are not whitelisted on this server. If you believe this is an error,
+    please contact Sten.
+  server-full: The server is full, please try again later!
+  outdated-client: Your Minecraft version is outdated! Please use version {0}.
+  outdated-server: The server is running an older version ({0}), please try again
+    later!
+  restart: The server is restarting, please wait!
+  unknown-command: Unknown command. Try something else!
 advancements:
   disable-saving: false
   disabled:
@@ -39,10 +53,10 @@ commands:
   spam-exclusions: []
   silent-commandblock-console: false
   replace-commands:
-    - setblock
-    - summon
-    - testforblock
-    - tellraw
+  - setblock
+  - summon
+  - testforblock
+  - tellraw
   log: true
 stats:
   disable-saving: false
@@ -180,3 +194,4 @@ world-settings:
     verbose: false
 players:
   disable-saving: false
+config-version: 12
