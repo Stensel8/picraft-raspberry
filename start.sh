@@ -242,3 +242,9 @@ if [ -n "${EXISTING_SESSION}" ]; then
 else
     create_new_session
 fi
+
+# Optional: Automatically trigger Chunky pre-generation task via tmux.
+echo "Waiting 30 seconds for the server to fully initialize. Once complete, the terminal will be returned to you."
+sleep 30
+tmux send-keys -t mc-server "chunky start world square 0 0 5000" ENTER
+echo "Chunky pre-generation task triggered: /chunky start world square 0 0 5000"
