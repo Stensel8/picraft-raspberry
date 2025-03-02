@@ -27,8 +27,8 @@ Before using this server, ensure you have the following:
 
 Simply clone the repository and run the `./start.sh` script. This script will check for Java, download and verify the latest PaperMC jar, and install any missing dependencies:
 
-    git clone https://github.com/Stensel8/picraft-raspberry5.git
-    cd picraft-raspberry5
+    git clone https://github.com/Stensel8/picraft-raspberry.git
+    cd picraft-raspberry
     ./start.sh
 
 ### Manual Java Installation (Optional)
