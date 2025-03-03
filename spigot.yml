@@ -11,6 +11,16 @@
 # Forums: http://www.spigotmc.org/
 
 settings:
+  attribute:
+    maxAbsorption:
+      max: 2048.0
+    maxHealth:
+      max: 1024.0
+    movementSpeed:
+      max: 1024.0
+    attackDamage:
+      max: 2048.0
+  # General server settings
   log-named-deaths: true
   debug: false
   bungeecord: false
@@ -21,20 +31,17 @@ settings:
   moved-wrongly-threshold: 0.0625
   moved-too-quickly-multiplier: 10
   log-villager-deaths: true
+  
+  # Watchdog timeout in seconds. If the server freezes for this long, it will force a shutdown.
   timeout-time: 60
   restart-on-crash: true
   restart-script: ./start.sh
+  
+  # Netty threads (networking). Usually 4 is fine; you can increase if needed.
   netty-threads: 4
-  attribute:
-    maxAbsorption:
-      max: 20.0
-    maxHealth:
-      max: 20
-    movementSpeed:
-      max: 0.1
-    attackDamage:
-      max: 1.0
+
 messages:
+  # Custom messages
   whitelist: You are not whitelisted on this server. If you believe this is an error,
     please contact Sten.
   server-full: The server is full, please try again later!
@@ -43,11 +50,14 @@ messages:
     later!
   restart: The server is restarting, please wait!
   unknown-command: Unknown command. Try something else!
+
 advancements:
   disable-saving: false
   disabled:
   - minecraft:story/disabled
+
 commands:
+  # Tab completion: 0 means you must type the first letter before commands appear
   tab-complete: 0
   send-namespaced: true
   spam-exclusions: []
@@ -58,26 +68,35 @@ commands:
   - testforblock
   - tellraw
   log: true
+
 stats:
   disable-saving: false
   forced-stats: {}
+
 world-settings:
   default:
-    unload-frozen-chunks: false
-    seed-trialchambers: 94251327
-    seed-trailruins: 83469867
     below-zero-generation-in-existing-chunks: true
-    simulation-distance: 15
-    view-distance: 30
-    hopper-can-load-chunks: false
-    seed-nether: 30084232
-    seed-ancientcity: 20083232
-    seed-buriedtreasure: 10387320
-    seed-mineshaft: default
-    seed-stronghold: default
+    merge-radius:
+      item: 0.5
+      exp: -1.0
+    mob-spawn-range: 8
+    trident-despawn-rate: 1200
+    zombie-aggressive-towards-villager: true
+    enable-zombie-pigmen-portal-spawns: true
+    wither-spawn-sound-radius: 0
+    end-portal-sound-radius: 0
+    hanging-tick-frequency: 100
     thunder-chance: 100000
-    verbose: true
+    unload-frozen-chunks: false
+    entity-tracking-range:
+      players: 128
+      animals: 96
+      monsters: 96
+      misc: 96
+      display: 128
+      other: 64
     hopper-amount: 1
+    hopper-can-load-chunks: false
     dragon-death-sound-radius: 0
     seed-village: 10387312
     seed-desert: 14357617
@@ -90,33 +109,68 @@ world-settings:
     seed-outpost: 165745296
     seed-endcity: 10387313
     seed-slime: 987234911
-    seed-bastion: 30084232
-    seed-fortress: 30084232
+    seed-nether: 30084232
     seed-mansion: 10387319
     seed-fossil: 14357921
     seed-portal: 34222645
+    seed-ancientcity: 20083232
+    seed-trailruins: 83469867
+    seed-trialchambers: 94251327
+    seed-buriedtreasure: 10387320
+    seed-mineshaft: default
+    seed-stronghold: default
+    max-tick-time:
+      tile: 50
+      entity: 50
+    verbose: false
+    # The default view-distance and simulation-distance for all worlds
+    # Lower these if your Pi struggles, or raise them if you have more resources
+    view-distance: 10
+    simulation-distance: 10
+    
+    # Limit how many TNT explosions can be processed each tick (default 100)
     max-tnt-per-tick: 100
-    enable-zombie-pigmen-portal-spawns: true
-    item-despawn-rate: 6000
-    wither-spawn-sound-radius: 8
-    arrow-despawn-rate: 300
-    trident-despawn-rate: 1000
-    hanging-tick-frequency: 100
-    zombie-aggressive-towards-villager: true
+    
+    # How long items and arrows remain before despawning (vanilla defaults)
+    item-despawn-rate: 6000 # 5 minutes
+    arrow-despawn-rate: 1200 # 1 minute
+    
+    # Keep spawner mobs normal (false = no nerf)
     nerf-spawner-mobs: false
-    end-portal-sound-radius: 0
-    mob-spawn-range: 6
+    
+    # Default entity activation ranges for performance
+    entity-activation-range:
+      wake-up-inactive:
+        animals-max-per-tick: 4
+        animals-every: 1200
+        animals-for: 100
+        monsters-max-per-tick: 8
+        monsters-every: 400
+        monsters-for: 100
+        villagers-max-per-tick: 4
+        villagers-every: 600
+        villagers-for: 100
+        flying-monsters-max-per-tick: 8
+        flying-monsters-every: 200
+        flying-monsters-for: 100
+      villagers-work-immunity-after: 100
+      villagers-work-immunity-for: 20
+      villagers-active-for-panic: true
+      tick-inactive-villagers: true
+      ignore-spectators: false
+      animals: 32
+      monsters: 32
+      raiders: 48
+      misc: 16
+      water: 16
+      villagers: 32
+      flying-monsters: 32
+    
+    # Max collision checks per tick (8 is Spigot's default)
     max-entity-collisions: 8
-    merge-radius:
-      exp: 6.0
-      item: 4.0
+    
+    # Crop growth modifiers, 100 = 100% (vanilla speed)
     growth:
-      pitcherplant-modifier: 100
-      torchflower-modifier: 100
-      twistingvines-modifier: 100
-      weepingvines-modifier: 100
-      cavevines-modifier: 100
-      glowberry-modifier: 100
       cactus-modifier: 100
       cane-modifier: 100
       melon-modifier: 100
@@ -133,35 +187,19 @@ world-settings:
       bamboo-modifier: 100
       sweetberry-modifier: 100
       kelp-modifier: 100
-    entity-activation-range:
-      ignore-spectators: false
-      animals: 32
-      monsters: 48
-      raiders: 48
-      misc: 16
-      water: 32
-      villagers: 32
-      flying-monsters: 64
-      villagers-work-immunity-after: 100
-      villagers-work-immunity-for: 20
-      villagers-active-for-panic: true
-      tick-inactive-villagers: false
-      wake-up-inactive:
-        animals-max-per-tick: 10
-        animals-every: 400
-        animals-for: 100
-        monsters-max-per-tick: 12
-        monsters-every: 200
-        monsters-for: 100
-        villagers-max-per-tick: 6
-        villagers-every: 600
-        villagers-for: 100
-        flying-monsters-max-per-tick: 8
-        flying-monsters-every: 100
-        flying-monsters-for: 100
+      torchflower-modifier: 100
+      pitcherplant-modifier: 100
+      twistingvines-modifier: 100
+      weepingvines-modifier: 100
+      cavevines-modifier: 100
+      glowberry-modifier: 100
+    
+    # Hopper transfer settings (default vanilla/spigot)
     ticks-per:
       hopper-transfer: 8
       hopper-check: 1
+    
+    # Default hunger/exhaustion values
     hunger:
       jump-walk-exhaustion: 0.05
       jump-sprint-exhaustion: 0.2
@@ -170,28 +208,8 @@ world-settings:
       swim-multiplier: 0.01
       sprint-multiplier: 0.1
       other-multiplier: 0
-    max-tick-time:
-      tile: 1000
-      entity: 1000
-    squid-spawn-range:
-      min: 45
-    entity-tracking-range:
-      display: 64
-      players: 48
-      animals: 48
-      monsters: 48
-      misc: 32
-      other: 64
-  worldeditregentempworld:
-    verbose: false
-  world_nether:
-    view-distance: 30
-    simulation-distance: 15
-  world_the_end:
-    view-distance: 30
-    simulation-distance: 15
-  faweregentempworld:
-    verbose: false
+
 players:
   disable-saving: false
+
 config-version: 12

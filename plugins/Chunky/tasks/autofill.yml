@@ -1,6 +1,6 @@
 task: fill
 world: world
-radius: 5000           # Generate all chunks within 5000 blocks
-chunksPerTick: 2       # Lower this value to reduce load on your Pi
-delayBeforeStart: 20   # Wait 20 seconds after server startup before starting the task
-autoRun: true          # Automatically start the task
+radius: 10000           # Generate all chunks within 10000 blocks.
+chunksPerTick: 2       # Lower this value to reduce load on your Pi.
+delayBeforeStart: 30   # Wait 30 seconds after server startup before starting the task.
+autoRun: true          # Automatically start the task.

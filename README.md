@@ -96,11 +96,33 @@ The repository includes a web server component intended for map plugins (such as
 
 The server is pre-configured with optimized settings files and dynamic configuration scripts:
 - **Server Settings:** Optimized for best performance on a Raspberry Pi.
-- **Plugin Settings:** Use the `scripts/configure-settings.sh` script to adjust server and plugin configurations as needed.
+- **Java Flags:** Optimized for best performance on a Raspberry Pi.
+
+# Configuration Guide
 
 To update or customize your configurations:
 
-    ./scripts/configure-settings.sh
+- **server.properties**  
+  Base Minecraft settings (port, MOTD, game mode, difficulty, etc.).
+
+- **bukkit.yml**  
+  General Bukkit options, including spawn limits and core server tweaks.
+
+- **spigot.yml**  
+  Spigot-specific settings like entity activation ranges, hopper timings, and more.
+
+- **paper-global.yml**  
+  Global PaperMC options for performance, chat limits, and packet settings.
+
+- **paper-world-defaults.yml**  
+  Default settings for all worlds (mob-spawning, view distance, simulation distance, etc.).
+
+- **[worldname/foldername]/paper-world.yml** (optional)  
+  World-specific configuration that overrides defaults for individual worlds.
+
+Edit these files to change your server’s behavior and performance. For a vanilla-like experience or to optimize performance on devices like the Raspberry Pi, remove or adjust non-essential tweaks as needed. Always back up your files before making changes.
+
+Happy customizing!
 
 ## Usage
 
@@ -149,8 +171,13 @@ This project uses a few third-party plugins. These plugins are owned by their re
    - **Sources:**  
      - [GitHub](https://github.com/NEZNAMY/TAB/)
 
-Please note that each plugin remains the property of its original authors. We are simply using these tools and do not hold any rights to them.
+5. **PlaceholderAPI**  
+   - **Description:** The best and simplest way to add placeholders to your server!  
+   - **Sources:**  
+     - [Spigot page](https://www.spigotmc.org/resources/placeholderapi.6245/)  
+     - [GitHub](https://github.com/PlaceholderAPI/PlaceholderAPI)
 
+Please note that each plugin remains the property of its original authors. We are simply using these tools and do not hold any rights to them.
 
 ## Disclaimer
 

@@ -183,11 +183,12 @@ clean_server_properties &
 
 # Prepare the Java command (using a variable makes it easier to adjust/debug)
 JAVA_CMD="java \
+    -Dpaper.preferSparkPlugin=true \
     -Xms${ALLOCATED_RAM} \
     -Xmx${ALLOCATED_RAM} \
     -XX:+UseG1GC \
     -XX:+ParallelRefProcEnabled \
-    -XX:MaxGCPauseMillis=200 \
+    -XX:MaxGCPauseMillis=300 \
     -XX:+UnlockExperimentalVMOptions \
     -XX:+DisableExplicitGC \
     -XX:+AlwaysPreTouch \
@@ -197,7 +198,7 @@ JAVA_CMD="java \
     -XX:G1ReservePercent=20 \
     -XX:G1HeapWastePercent=5 \
     -XX:G1MixedGCCountTarget=4 \
-    -XX:InitiatingHeapOccupancyPercent=15 \
+    -XX:InitiatingHeapOccupancyPercent=25 \
     -XX:G1MixedGCLiveThresholdPercent=90 \
     -XX:G1RSetUpdatingPauseTimePercent=5 \
     -XX:SurvivorRatio=32 \
@@ -246,5 +247,5 @@ fi
 # Optional: Automatically trigger Chunky pre-generation task via tmux.
 echo "Waiting 30 seconds for the server to fully initialize. Once complete, the terminal will be returned to you."
 sleep 30
-tmux send-keys -t mc-server "chunky start world square 0 0 5000" ENTER
-echo "Chunky pre-generation task triggered: /chunky start world square 0 0 5000"
+tmux send-keys -t mc-server "chunky start world square 0 0 10000" ENTER
+echo "Chunky pre-generation task triggered: /chunky start world square 0 0 10000"
