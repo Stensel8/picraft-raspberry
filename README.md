@@ -195,7 +195,7 @@ This project uses a few third-party plugins. These plugins are owned by their re
 6. **WorldEdit**  
    - **Description:** Minecraft map editor and mod.
    - **Sources:**  
-     - [Website](hhttps://enginehub.org/worldedit)  
+     - [Website](https://enginehub.org/worldedit)  
      - [GitHub](https://github.com/enginehub/worldedit)
 Please note that each plugin remains the property of its original authors. We are simply using these tools and do not hold any rights to them.
 
