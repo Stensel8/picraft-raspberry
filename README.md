@@ -139,8 +139,6 @@ To update or customize your configurations:
 
 Edit these files to change your server’s behavior and performance. For a vanilla-like experience or to optimize performance on devices like the Raspberry Pi, remove or adjust non-essential tweaks as needed. Always back up your files before making changes.
 
-Happy customizing!
-
 ## Usage
 
 ### Starting the Server
