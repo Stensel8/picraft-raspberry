@@ -1,5 +1,7 @@
 # Raspberry Pi Minecraft Server
 
+![Raspberry Pi Minecraft Server](https://github.com/Stensel8/picraft-raspberry/blob/main/server-icon.jpg)
+
 This repository contains a lightweight Minecraft server optimized for running on a Raspberry Pi 5. It uses a combination of the latest **PaperMC forks/flavored servers** to deliver a smooth and efficient experience on resource-constrained devices.
 
 > **Note:** This project is still under development. Contributions and feedback are welcome!
@@ -8,24 +10,39 @@ This repository contains a lightweight Minecraft server optimized for running on
 
 - **Optimized for Raspberry Pi 5:** Pre-configured with settings adjusted to the Raspberry Pi's hardware.
 - **Dynamic Dependency Management:** The `./start.sh` script auto-installs missing dependencies including:
-  - The latest PaperMC server (currently version 1.21.4)
-  - Azul Java JDK (auto-install if not found)
-- **Modern Server Configuration:** Uses optimized Java flags for better performance. (Experimental)
+  - The latest PaperMC server build
+  - Azul Java JDK (Preferred Java choice for good server performance)
+- **Modern Server Configuration:** Uses optimized Java flags for better performance.
 
 ## Prerequisites
 
 Before using this server, ensure you have the following:
 
-- A Raspberry Pi 5 (8GB or 16GB model)
-- A compatible power supply
+- A Raspberry Pi 5 (8GB or 16GB model, because we need at least 5GB of RAM for the server)
+- A compatible and good working power supply
 - An NVMe drive with a Linux-based OS installed (NVMe HAT recommended for performance)
 - Java 21 or later installed on your Raspberry Pi (if not present, the `./start.sh` script can auto-install Azul Java JDK)
 
 ## Installation
 
+To prefetch and pre-generate the first 10,000 chunks, execute the `chunky_preloader.sh` bash script. This script sends instructions to `tmux` for chunk preloading.
+
+**Note**: Performance will be significantly slower while chunk generation is running, but it is worth the wait. Once chunk generation is complete, you'll enjoy a fast and smooth server experience!
+
+Although this step is optional, I highly recommend it as I use it myself.
+
+### Monitoring Chunk Generation
+
+You can monitor chunk generation status within the `tmux` session. Simply attach to the session by running:
+
+```bash
+tmux attach -t mc-server
+```
+To detach from the tmux session while keeping it running in the background, press CTRL + B followed by the letter D on your keyboard.
+
 ### Automatic Setup
 
-Simply clone the repository and run the `./start.sh` script. This script will check for Java, download and verify the latest PaperMC jar, and install any missing dependencies:
+Simply clone the repository and run the `./start.sh` script. This script will check for existing Java installations, download and verify the latest PaperMC jar, and install any missing dependencies:
 
     git clone https://github.com/Stensel8/picraft-raspberry.git
     cd picraft-raspberry
@@ -90,7 +107,7 @@ If you prefer to manually install Java, we recommend using **Azul Zulu OpenJDK**
 
 ## Web Server (Under Development)
 
-The repository includes a web server component intended for map plugins (such as DynMap or Pl3xMap). **However, this part is currently under development and not yet usable.** We are exploring faster and more modern solutions—potentially migrating to an **nginx**-based setup—but for now, focus on the `./start.sh` script for running your server.
+The repository includes plans for a web server component, potentially useful for managing the server or supporting map plugins like DynMap or Pl3xMap. **At this time, this feature is still in early exploration and not stable or functional.** I’m considering adding and integrating a web server in the future to allow server management, but **I cannot guarantee** this will be implemented. For now, it’s best to focus on using the `./start.sh` script for running your server.
 
 ## Configuration
 
@@ -144,7 +161,7 @@ To stop the server, simply press `Ctrl+C` in the terminal where the server is ru
 
 ## Supported Minecraft Version
 
-- Currently, this server supports **Minecraft 1.21.4**.
+- Currently, this server only supports **Minecraft 1.21.4**.
 
 ## Third-Party Plugins
 
@@ -177,6 +194,11 @@ This project uses a few third-party plugins. These plugins are owned by their re
      - [Spigot page](https://www.spigotmc.org/resources/placeholderapi.6245/)  
      - [GitHub](https://github.com/PlaceholderAPI/PlaceholderAPI)
 
+6. **WorldEdit**  
+   - **Description:** Minecraft map editor and mod.
+   - **Sources:**  
+     - [Website](hhttps://enginehub.org/worldedit)  
+     - [GitHub](https://github.com/enginehub/worldedit)
 Please note that each plugin remains the property of its original authors. We are simply using these tools and do not hold any rights to them.
 
 ## Disclaimer

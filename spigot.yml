@@ -125,8 +125,8 @@ world-settings:
     verbose: false
     # The default view-distance and simulation-distance for all worlds
     # Lower these if your Pi struggles, or raise them if you have more resources
-    view-distance: 10
-    simulation-distance: 10
+    view-distance: 30
+    simulation-distance: 15
     
     # Limit how many TNT explosions can be processed each tick (default 100)
     max-tnt-per-tick: 100
@@ -208,6 +208,8 @@ world-settings:
       swim-multiplier: 0.01
       sprint-multiplier: 0.1
       other-multiplier: 0
+  worldeditregentempworld:
+    verbose: false
 
 players:
   disable-saving: false
