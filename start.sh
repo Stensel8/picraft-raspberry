@@ -20,9 +20,9 @@ ZULU21_ARM_RPM="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux.aa
 ZULU21_ARM_TAR="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_aarch64.tar.gz"
 
 # URL and expected SHA-256 hash for the Paper server jar file.
-JAR_URL="https://api.papermc.io/v2/projects/paper/versions/1.21.4/builds/212/downloads/paper-1.21.4-212.jar"
-JAR_HASH="8795be2df8280dd50ff15c233d8ed5ac882baee30b07dcfaf52354289229ee79"
-JAR_FILE_NAME="paper-1.21.4-212.jar"
+JAR_URL="https://api.papermc.io/v2/projects/paper/versions/1.21.4/builds/225/downloads/paper-1.21.4-225.jar"
+JAR_HASH="120c3c160768e9f7c968bda3f3e5c36a2a172ae30d3a3935148c45667d758590"
+JAR_FILE_NAME="paper-1.21.4-225.jar"
 # --------------- END CONFIG SECTION -----------
 
 # Function to detect the system architecture (x86_64 or aarch64).
