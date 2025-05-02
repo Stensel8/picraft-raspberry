@@ -1,140 +1,25 @@
-MyAnimation1:
-  change-interval: 100
-  texts:
-    - '&d-&3--------------'
-    - '&3-&d-&3-------------'
-    - '&3--&d-&3------------'
-    - '&3---&d-&3-----------'
-    - '&3----&d-&3----------'
-    - '&3-----&d-&3---------'
-    - '&3------&d-&3--------'
-    - '&3-------&d-&3-------'
-    - '&3--------&d-&3------'
-    - '&3---------&d-&3-----'
-    - '&3----------&d-&3----'
-    - '&3-----------&d-&3---'
-    - '&3------------&d-&3--'
-    - '&3-------------&d-&3-'
-    - '&3--------------&d-'
-    - '&3-------------&d-&3-'
-    - '&3------------&d-&3--'
-    - '&3-----------&d-&3---'
-    - '&3----------&d-&3----'
-    - '&3---------&d-&3-----'
-    - '&3--------&d-&3------'
-    - '&3-------&d-&3-------'
-    - '&3------&d-&3--------'
-    - '&3-----&d-&3---------'
-    - '&3----&d-&3----------'
-    - '&3---&d-&3-----------'
-    - '&3--&d-&3------------'
-    - '&3-&d-&3-------------'
-    - '&d-&3--------------'
-ServerName:
-  change-interval: 300
-  texts:
-    - '&7&lP_'
-    - '&7&lP_'
-    - '&7&lPl_'
-    - '&7&lPla_'
-    - '&7&lPlay_'
-    - '&7&lPlay._'
-    - '&7&lPlay.s_'
-    - '&7&lPlay.st_'
-    - '&7&lPlay.ste_'
-    - '&7&lPlay.sten_'
-    - '&7&lPlay.stens_'
-    - '&7&lPlay.stense_'
-    - '&7&lPlay.stensel_'
-    - '&7&lPlay.stensel._'
-    - '&7&lPlay.stensel.n_'
-    - '&7&lPlay.stensel.nl'
-    - '&7&lPlay.stensel.n_'
-    - '&7&lPlay.stensel._'
-    - '&7&lPlay.stensel_'
-    - '&7&lPlay.stense_'
-    - '&7&lPlay.stens_'
-    - '&7&lPlay.sten_'
-    - '&7&lPlay.ste_'
-    - '&7&lPlay.st_'
-    - '&7&lPlay.s_'
-    - '&7&lPlay._'
-    - '&7&lPlay_'
-    - '&7&lPla_'
-    - '&7&lPl_'
-    - '&7&lP_'
-    - '&7&lP_'
+# animations.yml — bottom-of-TAB “web” animation with left-to-right green wave
 web:
-  change-interval: 200
+  change-interval: 200   # 200 ms between frames (divisible by 50)
   texts:
-    # Basis:
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-    # Letters 1 - 11:
-    - '&6p&elay.stensel.nl'
-    - '&ep&6l&eay.stensel.nl'
-    - '&epl&6a&ey.stensel.nl'
-    - '&epla&6y&e.stensel.nl'
-    - '&eplay&6.&estensel.nl'
-    - '&eplay.&6s&etensel.nl'
-    - '&eplay.s&6t&eensel.nl'
-    - '&eplay.st&6e&ensel.nl'
-    - '&eplay.ste&6n&esel.nl'
-    - '&eplay.sten&6s&eel.nl'
-    - '&eplay.stens&6e&ell.nl'
-    # Letters 12 - 15:
-    - '&eplay.stense&6l&e.nl'
-    - '&eplay.stensel&6.&enl'
-    - '&eplay.stensel.&6n&el'
-    - '&eplay.stensel.n&6l'
-    # Back to basis:
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-    - '&eplay.stensel.nl'
-vote:
-  change-interval: 1000
-  texts:
-    - '&aplay.stensel.nl'
-    - '&a&nplay.stensel.nl'
-    - '&5play.stensel.nl'
-    - '&5&nplay.stensel.nl'
-Welcome:
-  change-interval: 400
-  texts:
-    - '&7&lW_'
-    - '&7&lW_'
-    - '&7&lWe_'
-    - '&7&lWel_'
-    - '&7&lWelc_'
-    - '&7&lWelco_'
-    - '&7&lWelcom_'
-    - '&7&lWelcome_'
-    - '&7&lWelcome_'
-    - '&7&lWelcome_'
-    - '&7&lWelcome_'
-    - '&7&lWelcom_'
-    - '&7&lWelco_'
-    - '&7&lWelc_'
-    - '&7&lWel_'
-    - '&7&lWe_'
-    - '&7&lW_'
-    - '&7&lW_'
-time:
-  change-interval: 3000
-  texts:
-    - '&7Time &b%time%'
-    - '&7Date &b%date%'
-barcolors:
-  change-interval: 1000
-  texts:
-    - RED
-    - BLUE
-    - GREEN
-    - YELLOW
+    - '&ap&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&ai&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&ac&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&ar&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&aa&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&af&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&at&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&a.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&as&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&at&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&ae&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&an&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&as&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&ae&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&al&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&a.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&ac&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&al&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&ao&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&au&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&ad'
