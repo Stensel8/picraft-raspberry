@@ -1,249 +1,200 @@
-#!/bin/bash
-# This script sets up and starts your customized PaperMC server.
-# It performs several tasks:
-#   1. Checks for Java and optionally installs Azul Zulu 21 if missing.
-#   2. Downloads and verifies the PaperMC jar if not already present.
-#   3. Dynamically calculates RAM allocation based on system memory.
-#   4. Cleans the server.properties file in the background.
-#   5. Creates or attaches to a tmux session to run the server.
+#!/usr/bin/env bash
+set -euo pipefail
 
-# --------------- CONFIG SECTION ---------------
-# Download links for Azul Zulu 21 (OpenJDK 21) for different architectures.
-# x86_64 architecture:
-ZULU21_X86_DEB="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_amd64.deb"
-ZULU21_X86_RPM="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux.x86_64.rpm"
-ZULU21_X86_TAR="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_x64.tar.gz"
+# -----------------------------------------------------------------------------
+# This script sets up and starts your customized PaperMC server on any Linux
+# box. It:
+#   1. Ensures Java (Azul Zulu 24) is installed, installing it with checksum
+#      verification if needed (and auto-fixing deps).
+#   2. Downloads & checks the PaperMC jar.
+#   3. Dynamically allocates RAM based on total system memory.
+#   4. Cleans server.properties in the background.
+#   5. Ensures tmux is configured for scrollback.
+#   6. Starts or attaches to a tmux session to run the server.
+# -----------------------------------------------------------------------------
 
-# ARM64 (aarch64) architecture:
-ZULU21_ARM_DEB="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_arm64.deb"
-ZULU21_ARM_RPM="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux.aarch64.rpm"
-ZULU21_ARM_TAR="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_aarch64.tar.gz"
+# --------------------- CONFIGURATION ---------------------
+JAR_URL="https://api.papermc.io/v2/projects/paper/versions/1.21.5/builds/59/downloads/paper-1.21.5-59.jar"
+JAR_HASH="45c63efe065a6ee9f0a261800f2700589e0dc3a3d4f69d3425608ed9c15401ca"
+JAR_NAME="paper-1.21.5-59.jar"
 
-# URL and expected SHA-256 hash for the Paper server jar file.
-JAR_URL="https://api.papermc.io/v2/projects/paper/versions/1.21.4/builds/225/downloads/paper-1.21.4-225.jar"
-JAR_HASH="120c3c160768e9f7c968bda3f3e5c36a2a172ae30d3a3935148c45667d758590"
-JAR_FILE_NAME="paper-1.21.4-225.jar"
-# --------------- END CONFIG SECTION -----------
+declare -A ZULU_URL=(
+  [x86_64_deb]="https://cdn.azul.com/zulu/bin/zulu24.30.11-ca-jdk24.0.1-linux_amd64.deb"
+  [x86_64_rpm]="https://cdn.azul.com/zulu/bin/zulu24.30.11-ca-jdk24.0.1-linux.x86_64.rpm"
+  [x86_64_tar]="https://cdn.azul.com/zulu/bin/zulu24.30.11-ca-jdk24.0.1-linux_x64.tar.gz"
+  [aarch64_deb]="https://cdn.azul.com/zulu/bin/zulu24.30.11-ca-jdk24.0.1-linux_arm64.deb"
+  [aarch64_rpm]="https://cdn.azul.com/zulu/bin/zulu24.30.11-ca-jdk24.0.1-linux.aarch64.rpm"
+  [aarch64_tar]="https://cdn.azul.com/zulu/bin/zulu24.30.11-ca-jdk24.0.1-linux_aarch64.tar.gz"
+)
+declare -A ZULU_HASH=(
+  [x86_64_deb]="2cd81fdd0ee62b2321e9c5256e5204f4d716afcd34ecc9d57f1ed3da8400f7e4"
+  [x86_64_rpm]="b814a378ccb7d8913acf956fd6185da72b9c91f1657abf11d285da9865001cd8"
+  [x86_64_tar]="12f6957c3a2a74d36d692cfee3aeeb949f15b5d80dad08bf0d3ed930d66d8659"
+  [aarch64_deb]="d0dd7e40cff30c26e0d30449e7ac4b467b2f078cbf07d1194ebe8f75d0a061ab"
+  [aarch64_rpm]="a4304ccf35457d98884393f6166fab9736031fd4521609be94ea10616d3b24e0"
+  [aarch64_tar]="e11e4ae574e0a51f64abd5961374a0bea553abc085bf26fde37cc0892b2ade4d"
+)
 
-# Function to detect the system architecture (x86_64 or aarch64).
-function detect_arch {
-    local ARCH
-    ARCH=$(uname -m)
-    case "$ARCH" in
-        x86_64)
-            echo "x86_64"
-            ;;
-        aarch64|arm64)
-            echo "aarch64"
-            ;;
-        *)
-            # For other architectures, just return the detected value.
-            echo "$ARCH"
-            ;;
-    esac
+TMUX_SESSION="mc-server"
+
+# --------------------- FUNCTIONS ---------------------
+
+detect_arch() {
+  case "$(uname -m)" in
+    x86_64)    echo "x86_64"   ;;
+    aarch64|arm64) echo "aarch64" ;;
+    *)         echo "unsupported" ;;
+  esac
 }
 
-# Function to offer installation of Azul Zulu 21 if Java is not found.
-function offer_install_java {
-    local ARCH="$(detect_arch)"
-    echo "Java not found on this system!"
-    echo "We can attempt to install Azul Zulu 21 (OpenJDK 21)."
-    read -p "Proceed with automatic installation? (y/n): " choice
-    if [[ "$choice" != "y" && "$choice" != "Y" ]]; then
-        echo "Skipping Java installation. Exiting."
-        exit 1
-    fi
-
-    # Select the correct download links based on architecture.
-    local DEB_LINK=""
-    local RPM_LINK=""
-    local TAR_LINK=""
-    if [ "$ARCH" == "x86_64" ]; then
-        DEB_LINK="$ZULU21_X86_DEB"
-        RPM_LINK="$ZULU21_X86_RPM"
-        TAR_LINK="$ZULU21_X86_TAR"
-    elif [ "$ARCH" == "aarch64" ]; then
-        DEB_LINK="$ZULU21_ARM_DEB"
-        RPM_LINK="$ZULU21_ARM_RPM"
-        TAR_LINK="$ZULU21_ARM_TAR"
-    else
-        echo "Unsupported architecture: $ARCH"
-        echo "Cannot auto-install Azul Zulu for your architecture. Please install Java manually."
-        exit 1
-    fi
-
-    # Let the user choose which installer format to use.
-    echo "Select an installer format:"
-    echo "1) .deb (Debian/Ubuntu-based)"
-    echo "2) .rpm (RedHat-based)"
-    echo "3) .tar.gz (Manual install)"
-    read -p "Enter 1, 2, or 3: " format_choice
-
-    case "$format_choice" in
-        1)
-            echo "Downloading .deb package for $ARCH..."
-            wget -O zulu21.deb "$DEB_LINK"
-            echo "Installing .deb package..."
-            sudo dpkg -i zulu21.deb
-            ;;
-        2)
-            echo "Downloading .rpm package for $ARCH..."
-            wget -O zulu21.rpm "$RPM_LINK"
-            echo "Installing .rpm package..."
-            sudo rpm -i zulu21.rpm
-            ;;
-        3)
-            echo "Downloading .tar.gz for $ARCH..."
-            wget -O zulu21.tar.gz "$TAR_LINK"
-            echo "Extracting to /opt/zulu21..."
-            sudo mkdir -p /opt/zulu21
-            sudo tar -xzf zulu21.tar.gz -C /opt/zulu21 --strip-components=1
-            echo "Azul Zulu 21 extracted to /opt/zulu21"
-            echo "Add it to your PATH by adding:"
-            echo "  export PATH=\"/opt/zulu21/bin:\$PATH\""
-            echo "Temporarily adding to PATH for this script."
-            export PATH="/opt/zulu21/bin:$PATH"
-            ;;
-        *)
-            echo "Invalid selection. Exiting."
-            exit 1
-            ;;
-    esac
-}
-
-# Function to check if Java is installed; if not, call the installation function.
-function check_java {
-    if ! command -v java &> /dev/null; then
-        offer_install_java
-        sudo apt-get update -y
-        sudo apt-get install -f -y
-        sudo apt autoremove -y
-
-        # Check again after installation.
-        if ! command -v java &> /dev/null; then
-            echo "Java still not found after attempted installation."
-            exit 1
-        fi
-    fi
-}
-
-# --- MAIN SCRIPT STARTS HERE ---
-check_java
-
-# Set the server's root directory to the current working directory.
-SERVER_ROOT_DIR=$(pwd)
-
-# Try to detect an existing valid PaperMC jar in the current directory.
-SERVER_JAR_NAME=$(ls "${SERVER_ROOT_DIR}" | grep -E "^(paper)-[0-9.]+-[0-9]+\.jar$" | sort -V | tail -n 1)
-SERVER_JAR_PATH="${SERVER_ROOT_DIR}/${JAR_FILE_NAME}"
-
-# If no valid jar is found, download it and verify its SHA-256 hash.
-if [ -z "${SERVER_JAR_NAME}" ]; then
-    echo "No valid server jar found. Downloading ${JAR_FILE_NAME}..."
-    wget -O "${SERVER_JAR_PATH}" "${JAR_URL}"
-    DOWNLOADED_HASH=$(sha256sum "${SERVER_JAR_PATH}" | awk '{ print $1 }')
-    if [ "${DOWNLOADED_HASH}" != "${JAR_HASH}" ]; then
-        echo "Jar file hash mismatch! (${DOWNLOADED_HASH} != ${JAR_HASH})"
-        exit 1
-    fi
-    echo "Jar file downloaded and verified!"
-    SERVER_JAR_NAME="${JAR_FILE_NAME}"
-fi
-SERVER_JAR_PATH="${SERVER_ROOT_DIR}/${SERVER_JAR_NAME}"
-
-# Calculate dynamic RAM allocation based on total system memory.
-TOTAL_RAM_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}')
-TOTAL_RAM_GB=$(( TOTAL_RAM_KB / 1024 / 1024 ))  # Convert KB to integer GB
-
-if [ "$TOTAL_RAM_GB" -lt 4 ]; then
-    echo "Insufficient memory: ${TOTAL_RAM_GB}G available, at least 4G needed!"
+download_and_verify() {
+  local url=$1 checksum=$2 out=$3
+  echo "Fetching $out..."
+  wget -q --show-progress -O "$out" "$url"
+  echo "Verifying checksum..."
+  local actual
+  actual=$(sha256sum "$out" | awk '{print $1}')
+  if [[ "$actual" != "$checksum" ]]; then
+    echo "ERROR: checksum mismatch for $out"
+    echo "  expected: $checksum"
+    echo "  actual:   $actual"
     exit 1
-fi
-
-if [ "$TOTAL_RAM_GB" -lt 8 ]; then
-    # Use 75% of total RAM if less than 8GB is available.
-    ALLOCATED_RAM_GB=$(( TOTAL_RAM_GB * 75 / 100 ))
-else
-    # Reserve 4GB for the system if 8GB or more is available.
-    ALLOCATED_RAM_GB=$(( TOTAL_RAM_GB - 4 ))
-fi
-
-ALLOCATED_RAM="${ALLOCATED_RAM_GB}G"
-echo "Total system RAM detected: ${TOTAL_RAM_GB}G"
-echo "Allocating ${ALLOCATED_RAM} for the Minecraft server..."
-
-# Function to clean the server.properties file after 2 minutes (runs in background).
-function clean_server_properties {
-    sleep 2m
-    SERVER_PROPERTIES_FILE_PATH="${SERVER_ROOT_DIR}/server.properties"
-    # Remove comment lines and sort the file.
-    sed '/^#/d' -i "${SERVER_PROPERTIES_FILE_PATH}"
-    sort -o "${SERVER_PROPERTIES_FILE_PATH}" "${SERVER_PROPERTIES_FILE_PATH}"
-}
-clean_server_properties &
-
-# Prepare the Java command with optimized flags.
-# The flags below are largely based on Aikar's recommendations.
-# For your Raspberry Pi 5 quad-core ARM system (~5GB allocated), consider:
-JAVA_CMD="java \
-    -Xms${ALLOCATED_RAM} \
-    -Xmx${ALLOCATED_RAM} \
-    -XX:+UseG1GC \
-    -XX:+ParallelRefProcEnabled \
-    -XX:ParallelGCThreads=4 \
-    -XX:ConcGCThreads=2 \
-    -XX:MaxGCPauseMillis=300 \
-    -XX:+UnlockExperimentalVMOptions \
-    -XX:+DisableExplicitGC \
-    -XX:+AlwaysPreTouch \
-    -XX:G1NewSizePercent=30 \
-    -XX:G1MaxNewSizePercent=40 \
-    -XX:G1ReservePercent=20 \
-    -XX:G1HeapWastePercent=5 \
-    -XX:G1MixedGCCountTarget=4 \
-    -XX:InitiatingHeapOccupancyPercent=25 \
-    -XX:G1MixedGCLiveThresholdPercent=90 \
-    -XX:G1RSetUpdatingPauseTimePercent=5 \
-    -XX:SurvivorRatio=32 \
-    -XX:+PerfDisableSharedMem \
-    -XX:MaxTenuringThreshold=1 \
-    -XX:+UseStringDeduplication \
-    -Dusing.aikars.flags=https://mcflags.emc.gs \
-    -Daikars.new.flags=true \
-    -Dpaper.maxChunkThreads=3 \
-    --add-modules=jdk.incubator.vector \
-    -jar ${SERVER_JAR_PATH} nogui"
-
-# Function to create a new tmux session and start the server (detached mode).
-function create_new_session {
-    echo "No active sessions found."
-    echo "Creating a new tmux session 'mc-server' in detached mode..."
-    /usr/bin/tmux new-session -d -s mc-server bash -c "${JAVA_CMD}"
-    sleep 2
-    if tmux has-session -t mc-server 2>/dev/null; then
-        echo "Minecraft server is now running with ${ALLOCATED_RAM} RAM allocated."
-        echo "To attach later, use: tmux attach -t mc-server"
-        echo "Server logs: ${SERVER_ROOT_DIR}/logs/latest.log"
-    else
-        echo "Error: Failed to create tmux session 'mc-server'."
-        exit 1
-    fi
+  fi
+  echo "Checksum OK."
 }
 
-# Check if a tmux session named 'mc-server' already exists.
-EXISTING_SESSION=$(tmux ls 2>/dev/null | grep "^mc-server:")
+offer_install_java() {
+  local arch key pkg fmt
+  arch=$(detect_arch)
+  if [[ "$arch" == "unsupported" ]]; then
+    echo "Unsupported architecture: $(uname -m)"
+    echo "Please install Java manually."
+    exit 1
+  fi
 
-if [ -n "${EXISTING_SESSION}" ]; then
-    read -p "Existing tmux session 'mc-server' found. Attach to it? (y/n): " answer
-    if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
-        tmux attach -t mc-server
-        echo "Minecraft server session ended."
-        echo "Server logs: ${SERVER_ROOT_DIR}/logs/latest.log"
-        exit 0
-    else
-        echo "Not attaching to the existing session. Exiting."
-        exit 0
+  read -rp "Java not found. Install Azul Zulu 24? (y/n) " choice
+  [[ "$choice" =~ ^[Yy]$ ]] || { echo "Aborted."; exit 1; }
+
+  cat <<EOF
+Choose package format:
+  1) .deb
+  2) .rpm
+  3) .tar.gz
+EOF
+  read -rp "Enter 1, 2 or 3: " fmt
+  case "$fmt" in
+    1) key="${arch}_deb"; pkg="zulu24.deb" ;;
+    2) key="${arch}_rpm"; pkg="zulu24.rpm" ;;
+    3) key="${arch}_tar"; pkg="zulu24.tar.gz" ;;
+    *) echo "Invalid choice."; exit 1 ;;
+  esac
+
+  download_and_verify "${ZULU_URL[$key]}" "${ZULU_HASH[$key]}" "$pkg"
+
+  echo "Installing $pkg..."
+  if [[ "$fmt" == "1" ]]; then
+    # try dpkg, auto-fix deps if needed
+    if ! sudo dpkg -i "$pkg"; then
+      echo "Dependency issues detected. Attempting to fix…"
+      sudo apt-get update -y
+      sudo apt-get install -f -y
+      sudo dpkg --configure -a
+      sudo dpkg -i "$pkg"
     fi
-else
-    create_new_session
+  elif [[ "$fmt" == "2" ]]; then
+    sudo rpm -i "$pkg"
+  else
+    sudo mkdir -p /opt/zulu24
+    sudo tar -xzf "$pkg" -C /opt/zulu24 --strip-components=1
+    echo 'export PATH="/opt/zulu24/bin:$PATH"' >> ~/.bashrc
+    export PATH="/opt/zulu24/bin:$PATH"
+  fi
+
+  # final sanity-check
+  if ! command -v java &>/dev/null; then
+    echo "ERROR: Java still not usable after install."
+    exit 1
+  fi
+}
+
+ensure_java() {
+  if ! command -v java &>/dev/null; then
+    offer_install_java
+  fi
+}
+
+clean_props() {
+  sleep 120
+  [[ -f server.properties ]] || return
+  sed -i '/^#/d' server.properties
+  sort -o server.properties server.properties
+}
+
+ensure_tmux_conf() {
+  local conf="$HOME/.tmux.conf" marker="set -g mouse on"
+  if [[ -f "$conf" ]]; then
+    grep -qF "$marker" "$conf" && { echo "tmux scrollback already enabled."; return; }
+    { echo ""; echo "# enable mouse scrollback"; echo "$marker"; } >>"$conf" \
+      && echo "tmux config updated for scroll support." \
+      || echo "Couldn't change tmux configuration, skipping."
+  else
+    { echo "# tmux config created by start.sh"; echo "$marker"; } >"$conf" \
+      && echo "tmux config created with scroll support." \
+      || echo "Couldn't create tmux configuration, skipping."
+  fi
+}
+
+start_server() {
+  if tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
+    read -rp "Attach to existing '$TMUX_SESSION'? (y/n) " ans
+    [[ "$ans" =~ ^[Yy]$ ]] && tmux attach -t "$TMUX_SESSION" && exit 0
+    echo "Leaving existing session running."; exit 0
+  fi
+
+  echo "Starting tmux session '$TMUX_SESSION'..."
+  tmux new-session -d -s "$TMUX_SESSION" "${JAVA_CMD[@]}"
+  sleep 2
+  tmux has-session -t "$TMUX_SESSION" 2>/dev/null \
+    && echo "Server running! Attach with: tmux attach -t $TMUX_SESSION" \
+    || { echo "Failed to start tmux session."; exit 1; }
+}
+
+# ------------------------ MAIN ------------------------
+
+ensure_java
+
+if [[ ! -f "$JAR_NAME" ]]; then
+  download_and_verify "$JAR_URL" "$JAR_HASH" "$JAR_NAME"
 fi
+
+total_kb=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+total_gb=$(( total_kb / 1024 / 1024 ))
+if (( total_gb < 4 )); then
+  echo "Need ≥4 GB RAM (found ${total_gb} GB)."; exit 1
+elif (( total_gb < 8 )); then
+  alloc_gb=$(( total_gb * 75 / 100 ))
+else
+  alloc_gb=$(( total_gb - 4 ))
+fi
+alloc="${alloc_gb}G"
+echo "Allocating $alloc for Minecraft."
+
+JAVA_CMD=(
+  java -Xms"$alloc" -Xmx"$alloc"
+  -XX:+UseG1GC -XX:+ParallelRefProcEnabled
+  -XX:ParallelGCThreads=4 -XX:ConcGCThreads=2
+  -XX:MaxGCPauseMillis=300 -XX:+UnlockExperimentalVMOptions
+  -XX:+DisableExplicitGC -XX:+AlwaysPreTouch
+  -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40
+  -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5
+  -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=25
+  -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5
+  -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem
+  -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication
+  -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true
+  -Dpaper.maxChunkThreads=3 --add-modules=jdk.incubator.vector
+  -jar "$JAR_NAME" nogui
+)
+
+clean_props & ensure_tmux_conf
+start_server

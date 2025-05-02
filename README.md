@@ -159,7 +159,7 @@ To stop the server, simply press `Ctrl+C` in the terminal where the server is ru
 
 ## Supported Minecraft Version
 
-- Currently, this server only supports **Minecraft 1.21.4**.
+- Currently, this server only supports **Minecraft 1.21.5**.
 
 ## Third-Party Plugins
 

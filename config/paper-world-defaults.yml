@@ -8,6 +8,7 @@
 # Configuration options here apply to all worlds, unless you specify overrides inside
 # the world-specific config file inside each world folder.
 # 
+# File Reference: https://docs.papermc.io/paper/reference/world-configuration/
 # Docs: https://docs.papermc.io/
 # Discord: https://discord.gg/papermc
 # Website: https://papermc.io/
@@ -307,7 +308,7 @@ spawn:
   allow-using-signs-inside-spawn-protection: false
 spawn-limits:
   ambient: 15
-  animals: 10
+  animals: 30
   axolotls: 3
   monsters: 70
   water-ambient: 15
