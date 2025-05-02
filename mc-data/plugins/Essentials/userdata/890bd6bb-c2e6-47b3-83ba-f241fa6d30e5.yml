@@ -1,0 +1,55 @@
+teleportenabled: true
+teleportauto: false
+godmode: false
+muted: false
+jailed: false
+ip-address: 77.160.237.63
+afk: false
+socialspy: false
+npc: false
+powertoolsenabled: true
+accepting-pay: true
+baltop-exempt: false
+timestamps:
+  lastteleport: 1745107134159
+  lastheal: 0
+  mute: 0
+  jail: 0
+  onlinejail: 0
+  logout: 1746209793932
+  login: 1746209741888
+money: '0'
+last-account-name: Stensel8
+logoutlocation:
+  world: e1b05343-a28e-412e-b6db-6bc16515db71
+  world-name: world
+  x: -289.6849219376079
+  y: 77.0
+  z: 263.5511838937958
+  yaw: -67.64932250976562
+  pitch: 27.000091552734375
+lastlocation:
+  world: e1b05343-a28e-412e-b6db-6bc16515db71
+  world-name: world
+  x: -323.67988427506094
+  y: 63.0
+  z: 85.32289233839508
+  yaw: 6.7724609375
+  pitch: 17.5492000579834
+mail:
+- legacy: false
+  read: true
+  message: hai
+  sender-name: Danoontjee
+  sender-uuid: 605abafa-b06a-4fcf-bcb2-cbaa3af1a41c
+  timestamp: 1745096497943
+  expire: 0
+homes:
+  home:
+    world: e1b05343-a28e-412e-b6db-6bc16515db71
+    world-name: world
+    x: -280.76052734087796
+    y: 77.0
+    z: 265.40200330629483
+    yaw: -23.400054931640625
+    pitch: 14.249991416931152

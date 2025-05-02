@@ -1,0 +1,36 @@
+# permissions.yml - Example for PaperMC 1.21.5
+# This file is rarely used. LuckPerms is the recommended way to manage permissions.
+
+groups:
+  default:
+    # Default group for all players.
+    permissions:
+      - essentials.help   # Allows use of /help
+      - essentials.spawn  # Allows use of /spawn
+
+  moderator:
+    # Moderators get additional permissions.
+    permissions:
+      - essentials.kick   # Allows kicking players
+    inheritance:
+      - default           # Inherits all permissions from the default group
+
+  admin:
+    # Admins have full access.
+    permissions:
+      - '*'               # Grants all permissions (not always reliable)
+    inheritance:
+      - moderator         # Inherits all permissions from the moderator group
+
+users:
+  # Specific players can be assigned to groups manually.
+  # Replace "player-uuid" with the actual UUID of a player.
+  "player-uuid":
+    group: admin          # Assigns this player to the admin group
+    permissions:
+      - essentials.fly    # Grants permission to use /fly
+
+# Reminder:
+# - This file has very limited functionality.
+# - Use LuckPerms for better permission management.
+# - Some plugins may not support this system.

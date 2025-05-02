@@ -1,0 +1,25 @@
+# animations.yml — bottom-of-TAB “web” animation with left-to-right green wave
+web:
+  change-interval: 200   # 200 ms between frames (divisible by 50)
+  texts:
+    - '&ap&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&ai&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&ac&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&ar&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&aa&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&af&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&at&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&a.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&as&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&at&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&ae&9n&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&an&9s&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&as&9e&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&ae&9l&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&al&9.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&a.&9c&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&ac&9l&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&al&9o&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&ao&9u&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&au&9d'
+    - '&9p&9i&9c&9r&9a&9f&9t&9.&9s&9t&9e&9n&9s&9e&9l&9.&9c&9l&9o&9u&ad'

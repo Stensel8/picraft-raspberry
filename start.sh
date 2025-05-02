@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# --------------------- SET-WORKING-DIR ---------------------------------------
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DATA_DIR="$SCRIPT_DIR/mc-data"
+mkdir -p "$DATA_DIR"
+cd "$DATA_DIR"
+# -----------------------------------------------------------------------------
+
 # -----------------------------------------------------------------------------
 # This script sets up and starts your customized PaperMC server on any Linux
 # box. It:
