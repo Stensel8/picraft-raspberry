@@ -1,0 +1,37 @@
+services:
+  picraft-raspberry:
+    # build locally from the Dockerfile in this folder
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # also tag it, so you can push/pull: docker push stensel8/picraft-raspberry:latest
+    image: stensel8/picraft-raspberry:latest
+
+    container_name: picraft-raspberry
+    ports:
+      - "25565:25565"
+
+    volumes:
+      # your world, logs, plugins, etc.
+      - ./mc-data:/mc-data
+
+      # inherit your host’s timezone by default (read-only)
+      - ${HOST_LOCALTIME:-/etc/localtime}:/etc/localtime:ro
+      - ${HOST_TIMEZONE:-/etc/timezone}:/etc/timezone:ro
+
+    environment:
+      # must be "true" to auto-accept the Minecraft EULA
+      EULA: "true"
+
+      # in-container timezone (fall back to host’s zone if you don't override)
+      TZ: "${TZ:-UTC}"
+
+      # extra JVM flags: e.g. "-XX:+UseStringDeduplication -Dmy.prop=foo"
+      JAVA_OPTS: "${JAVA_OPTS:-}"
+
+      # you can still override the Paper download if you need to:
+      # JAR_URL: "${JAR_URL}"
+      # JAR_HASH: "${JAR_HASH}"
+      # JAR_NAME: "${JAR_NAME}"
+
+    restart: unless-stopped

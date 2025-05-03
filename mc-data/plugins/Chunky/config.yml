@@ -1,0 +1,9 @@
+# Chunky Configuration
+# https://github.com/pop4959/Chunky/wiki/Configuration
+
+version: 2 # Config file version (should be set to 2 for the current version)
+language: en # Language for all plugin messages ('en' means English)
+continue-on-restart: true # If true, tasks will automatically resume after a server restart
+force-load-existing-chunks: false # If true, Chunky will force-load chunks that already exist (usually leave as false)
+silent: false # If true, suppress update messages; false to display them in the console
+update-interval: 3 # Time interval (in seconds) between update messages for task progress
