@@ -7,6 +7,8 @@ This repository contains a lightweight Minecraft server optimized for running on
 The idea of this project is to provide a one-click, single-deploy solution, making it extremely easy to set up and run your server with minimal effort.
 
 > **Note:** This project is still under development. Contributions and feedback are welcome!
+>
+> **Note:** On the very first run you may experience poor performance. This is because the server is busy caching/pre‑generating chunks. Once that initial caching is complete, subsequent runs will be much smoother.
 
 ## Features
 
@@ -57,7 +59,6 @@ cd picraft-raspberry
 A ready‑to‑use Docker image is published on Docker Hub:  
 `stensel8/picraft-raspberry:latest`
 
-### Quick Start
 
 Pull the image and run it with everything pre‑configured (chunk-caching, plugins, configs):
 
