@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# -------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Docker entrypoint for PaperMC:
-#   - Download & verify Java (Azul Zulu) if needed
-#   - Download & verify PaperMC JAR
-#   - Allocate RAM based on available memory
-#   - Clean server.properties in the background
-#   - Auto-accept EULA via EULA=true
-#   - Start the Minecraft server
-# -------------------------------------------------------------------
+#  1) cd into /mc-data (world, logs, configs)
+#  2) Download & verify Java (Azul Zulu) if missing
+#  3) Download & verify PaperMC JAR if missing
+#  4) Allocate RAM based on available memory
+#  5) Spawn a background task to clean server.properties
+#  6) Auto-accept EULA via EULA=true
+#  7) Launch the Minecraft server with optional extra JVM flags
+# -----------------------------------------------------------------------------
 
-# 1) Switch to the data directory (world, logs, configs live here)
 cd /mc-data
 
-# 2) Default configuration (all can be overridden via ENV)
-: "${JAR_URL:=https://api.papermc.io/v2/projects/paper/versions/1.21.5/builds/59/downloads/paper-1.21.5-59.jar}"
-: "${JAR_HASH:=45c63efe065a6ee9f0a261800f2700589e0dc3a3d4f69d3425608ed9c15401ca}"
-: "${JAR_NAME:=paper-1.21.5-59.jar}"
+#── defaults (all can be overridden via ENV) ─────────────────────────────────
+: "${JAR_URL:=https://api.papermc.io/v2/projects/paper/versions/1.21.5/builds/66/downloads/paper-1.21.5-66.jar}"
+: "${JAR_HASH:=52c272d92e34823bb116f7daa31984bab9e2f3da7f90169441fc0a7557e8ad90}"
+: "${JAR_NAME:=paper-1.21.5-66.jar}"
 
-# Azul Zulu download URLs and checksums
+# Azul Zulu download URLs & checksums
 declare -A ZULU_URL=(
   [x86_64]="https://cdn.azul.com/zulu/bin/zulu24.30.11-ca-jdk24.0.1-linux_x64.tar.gz"
   [aarch64]="https://cdn.azul.com/zulu/bin/zulu24.30.11-ca-jdk24.0.1-linux_aarch64.tar.gz"
@@ -29,7 +29,7 @@ declare -A ZULU_HASH=(
   [aarch64]="e11e4ae574e0a51f64abd5961374a0bea553abc085bf26fde37cc0892b2ade4d"
 )
 
-# Detect machine architecture
+#─ helper: detect CPU arch ───────────────────────────────────────────────────
 detect_arch() {
   case "$(uname -m)" in
     x86_64)    echo "x86_64"   ;;
@@ -38,7 +38,7 @@ detect_arch() {
   esac
 }
 
-# Download a file & verify its SHA256 checksum
+#─ helper: download & verify SHA256 ──────────────────────────────────────────
 download_and_verify() {
   local url=$1 checksum=$2 out=$3
   echo ">>> Downloading $out"
@@ -55,28 +55,27 @@ download_and_verify() {
   echo "✔ Checksum OK for $out"
 }
 
-# Ensure Java is installed, otherwise download & install Azul Zulu
+#─ helper: ensure Java is available ─────────────────────────────────────────
 ensure_java() {
   if ! command -v java &>/dev/null; then
     echo ">>> Java not found, installing Azul Zulu..."
     local arch=$(detect_arch)
-    [[ "$arch" != "unsupported" ]] || { echo "Unsupported arch $(uname -m)"; exit 1; }
+    [[ "$arch" != "unsupported" ]] || { echo "ERROR: unsupported arch $(uname -m)"; exit 1; }
 
-    local tarball="zulu.tar.gz"
-    download_and_verify "${ZULU_URL[$arch]}" "${ZULU_HASH[$arch]}" "$tarball"
+    download_and_verify "${ZULU_URL[$arch]}" "${ZULU_HASH[$arch]}" zulu.tar.gz
     mkdir -p /opt/zulu24
-    tar -xzf "$tarball" -C /opt/zulu24 --strip-components=1
-    rm -f "$tarball"
+    tar -xzf zulu.tar.gz -C /opt/zulu24 --strip-components=1
+    rm -f zulu.tar.gz
 
     export PATH="/opt/zulu24/bin:$PATH"
     echo 'export PATH="/opt/zulu24/bin:$PATH"' >> /root/.bashrc
 
-    command -v java >/dev/null \
+    command -v java &>/dev/null \
       || { echo "ERROR: Java installation failed."; exit 1; }
   fi
 }
 
-# Clean out comments & sort server.properties after a short delay
+#─ helper: clean server.properties after startup ────────────────────────────
 clean_properties() {
   sleep 120
   [[ -f server.properties ]] || return
@@ -86,16 +85,15 @@ clean_properties() {
   echo "✔ server.properties cleaned"
 }
 
-# ---------------------------- MAIN ----------------------------
-
+#─────────────────────────────────────────────────────────────────────────────
 ensure_java
 
-# Download PaperMC if not already present
+# Download PaperMC JAR if missing
 if [[ ! -f "$JAR_NAME" ]]; then
   download_and_verify "$JAR_URL" "$JAR_HASH" "$JAR_NAME"
 fi
 
-# Dynamically allocate RAM: ≥4 GB system → use all minus 4; else 75%
+# RAM allocation logic
 total_kb=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 total_gb=$(( total_kb / 1024 / 1024 ))
 if (( total_gb < 4 )); then
@@ -109,10 +107,10 @@ fi
 alloc="${alloc_gb}G"
 echo ">>> Allocating $alloc for Minecraft"
 
-# Clean up properties in the background
+# Clean up server.properties in the background
 clean_properties &
 
-# Auto-accept EULA via environment variable
+# Auto-accept EULA
 : "${EULA:=false}"
 if [[ "${EULA,,}" != "true" ]]; then
   echo "ERROR: You must accept the EULA (set EULA=true)" >&2
@@ -121,9 +119,10 @@ fi
 echo "eula=true" > eula.txt
 echo "✔ EULA accepted"
 
-# Launch PaperMC
+# Finally, launch the server with any extra JVM flags
 echo ">>> Starting PaperMC..."
-exec java -Xms"$alloc" -Xmx"$alloc" \
+exec java ${JAVA_OPTS:-} \
+  -Xms"$alloc" -Xmx"$alloc" \
   -XX:+UseG1GC -XX:+ParallelRefProcEnabled \
   -XX:ParallelGCThreads=4 -XX:ConcGCThreads=2 \
   -XX:MaxGCPauseMillis=300 -XX:+UnlockExperimentalVMOptions \
@@ -135,6 +134,5 @@ exec java -Xms"$alloc" -Xmx"$alloc" \
   -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem \
   -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication \
   -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true \
-  -Dpaper.maxChunkThreads=3 \
-  --add-modules=jdk.incubator.vector \
+  -Dpaper.maxChunkThreads=3 --add-modules=jdk.incubator.vector \
   -jar "$JAR_NAME" nogui
