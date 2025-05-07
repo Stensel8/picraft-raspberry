@@ -15,9 +15,9 @@ set -euo pipefail
 cd /mc-data
 
 #── defaults (all can be overridden via ENV) ─────────────────────────────────
-: "${JAR_URL:=https://api.papermc.io/v2/projects/paper/versions/1.21.5/builds/70/downloads/paper-1.21.5-70.jar}"
-: "${JAR_HASH:=05c5bf333b205a6b7d3c41d888576bf9984eb1623f1ac459ba4791fd1604748a}"
-: "${JAR_NAME:=paper-1.21.5-70.jar}"
+: "${JAR_URL:=https://api.papermc.io/v2/projects/paper/versions/1.21.5/builds/73/downloads/paper-1.21.5-73.jar}"
+: "${JAR_HASH:=0415153fd13c82a80b161193688d4a12872b994d4bd50fb0dc2d0cbbc4eb9958}"
+: "${JAR_NAME:=paper-1.21.5-73.jar}"
 
 # Azul Zulu download URLs & checksums
 declare -A ZULU_URL=(
