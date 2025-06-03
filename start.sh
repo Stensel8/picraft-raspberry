@@ -21,9 +21,9 @@ cd "$DATA_DIR"
 # -----------------------------------------------------------------------------
 
 # --------------------- CONFIGURATION ---------------------
-JAR_URL="https://api.papermc.io/v2/projects/paper/versions/1.21.5/builds/102/downloads/paper-1.21.5-102.jar"
-JAR_HASH="c2f2ff3aefb2e939aea15fd8ad891500ec19af0bc95510d8f3fe7faac564f0b4"
-JAR_NAME="paper-1.21.5-102.jar"
+JAR_URL="https://api.papermc.io/v2/projects/paper/versions/1.21.5/builds/103/downloads/paper-1.21.5-103.jar"
+JAR_HASH="e3ffff4b83be9e6216dceea3a40215c09d083de343195667615febc3d1454cf3"
+JAR_NAME="paper-1.21.5-103.jar"
 
 declare -A ZULU_URL=(
   [x86_64_deb]="https://cdn.azul.com/zulu/bin/zulu24.30.11-ca-jdk24.0.1-linux_amd64.deb"
