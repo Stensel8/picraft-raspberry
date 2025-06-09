@@ -1,5 +1,10 @@
-# Raspberry Pi Minecraft Server
+# ⚠️ ARCHIVED / NO LONGER MAINTAINED
 
+This project has been archived and is no longer actively maintained due to changing circumstances.
+
+Development has moved to other projects. Feel free to fork this repository if you want to continue development.
+
+---
 ![Raspberry Pi Minecraft Server](https://github.com/Stensel8/picraft-raspberry/blob/main/mc-data/server-icon.jpg)
 
 This repository contains a lightweight Minecraft server optimized for running on a Raspberry Pi 5. It uses a combination of the latest **PaperMC forks/flavored servers** to deliver a smooth and efficient experience on resource-constrained devices.
